@@ -183,10 +183,8 @@ namespace HumaneSociety
 
         internal static Animal GetAnimalByID(int id)
         {
-            //Client client = db.Clients.Where(c => c.UserName == userName && c.Password == password).Single();
             Animal animal = db.Animals.Where(a => a.AnimalId == id).Single();
             return animal;
-            //throw new NotImplementedException();
         }
 
         internal static void UpdateAnimal(int animalId, Dictionary<int, string> updates)
@@ -221,22 +219,18 @@ namespace HumaneSociety
         {
             Category category = db.Categories.Where(c => c.Name == categoryName).Single();
             return category.CategoryId;
-            //throw new NotImplementedException();
         }
         
         internal static Room GetRoom(int animalId)
         {
             Room room = db.Rooms.Where(r => r.AnimalId == animalId).Single();
             return room;
-            //throw new NotImplementedException();
         }
         
         internal static int GetDietPlanId(string dietPlanName)
         {
             DietPlan dietPlan = db.DietPlans.Where(d => d.Name == dietPlanName).Single();
-            
             return dietPlan.DietPlanId;
-            //throw new NotImplementedException();
         }
 
         // TODO: Adoption CRUD Operations
@@ -250,15 +244,11 @@ namespace HumaneSociety
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
         {
-            //get multiple
-            //check for 'pending' status
-            //List<Client> allClients = db.Clients.ToList();
             List<Adoption> allAdoptions = db.Adoptions.ToList();
 
             var tempPendingAdoptions = allAdoptions.Where(a => a.ApprovalStatus.Contains("pending"));
 
             return tempPendingAdoptions as IQueryable<Adoption>;
-            //throw new NotImplementedException();
         }
 
         internal static void UpdateAdoption(bool isAdopted, Adoption adoption)
@@ -282,12 +272,8 @@ namespace HumaneSociety
         // TODO: Shots Stuff
         internal static IQueryable<AnimalShot> GetShots(Animal animal)
         {
-            //get multiple
-            //List<Client> allClients = db.Clients.ToList();
-
-            //return allClients;
-            
-            throw new NotImplementedException();
+            var animalShots = db.AnimalShots.Where(a => a.AnimalId == animal.AnimalId);
+            return animalShots as IQueryable<AnimalShot>;
         }
 
         internal static void UpdateShot(string shotName, Animal animal)
