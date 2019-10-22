@@ -166,81 +166,139 @@ namespace HumaneSociety
         // TODO: Allow any of the CRUD operations to occur here
         internal static void RunEmployeeQueries(Employee employee, string crudOperation)
         {
+            //use a delegate here?
             throw new NotImplementedException();
         }
 
         // TODO: Animal CRUD Operations
         internal static void AddAnimal(Animal animal)
         {
+            //new animal
+            //check constructor method?
+            //set properties
+            //insertonsubmit()
+            //submitchanges()
             throw new NotImplementedException();
         }
 
         internal static Animal GetAnimalByID(int id)
         {
-            throw new NotImplementedException();
+            //Client client = db.Clients.Where(c => c.UserName == userName && c.Password == password).Single();
+            Animal animal = db.Animals.Where(a => a.AnimalId == id).Single();
+            return animal;
+            //throw new NotImplementedException();
         }
 
         internal static void UpdateAnimal(int animalId, Dictionary<int, string> updates)
         {            
+            //do animalFromDb = null like clientFromDb = null;
+            //try/catch/return to avoid the rest of the procedure if no animal found
+            //set animalFromDb from animalWithUpdates
+            //any foreign key info will need to be posted prior to this animal insert(new room, new mealplan, etc)
+            //insertonsubmit(), then submitchanges()
+            //append new animal fk info from newly inserted FK objects
+            //submitchanges()
             throw new NotImplementedException();
         }
 
         internal static void RemoveAnimal(Animal animal)
-        {
+        {            
+            //deleteonsubmit
+            //submitchanges
             throw new NotImplementedException();
         }
         
         // TODO: Animal Multi-Trait Search
         internal static IQueryable<Animal> SearchForAnimalsByMultipleTraits(Dictionary<int, string> updates) // parameter(s)?
         {
+            //recursive?
+            //use UI class here?
             throw new NotImplementedException();
         }
          
         // TODO: Misc Animal Things
         internal static int GetCategoryId(string categoryName)
         {
-            throw new NotImplementedException();
+            Category category = db.Categories.Where(c => c.Name == categoryName).Single();
+            return category.CategoryId;
+            //throw new NotImplementedException();
         }
         
         internal static Room GetRoom(int animalId)
         {
-            throw new NotImplementedException();
+            Room room = db.Rooms.Where(r => r.AnimalId == animalId).Single();
+            return room;
+            //throw new NotImplementedException();
         }
         
         internal static int GetDietPlanId(string dietPlanName)
         {
-            throw new NotImplementedException();
+            DietPlan dietPlan = db.DietPlans.Where(d => d.Name == dietPlanName).Single();
+            
+            return dietPlan.DietPlanId;
+            //throw new NotImplementedException();
         }
 
         // TODO: Adoption CRUD Operations
         internal static void Adopt(Animal animal, Client client)
         {
+            //new insert to adoptions table
+            //insertonsubmit()
+            //submitchanges()
             throw new NotImplementedException();
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
         {
-            throw new NotImplementedException();
+            //get multiple
+            //check for 'pending' status
+            //List<Client> allClients = db.Clients.ToList();
+            List<Adoption> allAdoptions = db.Adoptions.ToList();
+
+            var tempPendingAdoptions = allAdoptions.Where(a => a.ApprovalStatus.Contains("pending"));
+
+            return tempPendingAdoptions as IQueryable<Adoption>;
+            //throw new NotImplementedException();
         }
 
         internal static void UpdateAdoption(bool isAdopted, Adoption adoption)
         {
+            //do animalFromDb = null like clientFromDb = null;
+            //try/catch/return to avoid the rest of the procedure if no animal found
+            //set animalFromDb from animalWithUpdates
+            //any foreign key info will need to be posted prior to this animal insert(new room, new mealplan, etc)
+            //insertonsubmit(), then submitchanges()
+            //append new animal fk info from newly inserted FK objects
+            //submitchanges()
             throw new NotImplementedException();
         }
 
         internal static void RemoveAdoption(int animalId, int clientId)
         {
+            //delete
             throw new NotImplementedException();
         }
 
         // TODO: Shots Stuff
         internal static IQueryable<AnimalShot> GetShots(Animal animal)
         {
+            //get multiple
+            //List<Client> allClients = db.Clients.ToList();
+
+            //return allClients;
+            
             throw new NotImplementedException();
         }
 
         internal static void UpdateShot(string shotName, Animal animal)
         {
+            //do animalFromDb = null like clientFromDb = null;
+            //try/catch/return to avoid the rest of the procedure if no animal found
+            //set animalFromDb from animalWithUpdates
+            //any foreign key info will need to be posted prior to this animal insert(new room, new mealplan, etc)
+            //insertonsubmit(), then submitchanges()
+            //append new animal fk info from newly inserted FK objects
+            //submitchanges()
             throw new NotImplementedException();
         }
     }

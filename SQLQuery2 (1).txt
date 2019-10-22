@@ -1,0 +1,57 @@
+INSERT INTO categories (name) VALUES ('shark')
+INSERT INTO categories (name) VALUES ('tiger')
+INSERT INTO categories (name) VALUES ('jellyfish')
+INSERT INTO categories (name) VALUES ('scorpion')
+INSERT INTO categories (name) VALUES ('hippogriff')
+
+INSERT INTO Employees(FirstName, LastName, UserName, Password, EmployeeNumber, Email) VALUES ('Beavis', 'Smith', 'bsmith', '123abc', 0, 'bsmith@xpzoo.com')
+INSERT INTO Employees(FirstName, LastName, UserName, Password, EmployeeNumber, Email) VALUES ('Hector', 'Perez', 'hperez', 'iliketacos', 1, 'hperez@xpzoo.com')
+INSERT INTO Employees(FirstName, LastName, UserName, Password, EmployeeNumber, Email) VALUES ('Mickey', 'Mouse', 'mm1', 'passw1', 2, 'mmouse@xpzoo.com')
+INSERT INTO Employees(FirstName, LastName, UserName, Password, EmployeeNumber, Email) VALUES ('Tonky', 'Stark', 'tstark', 'smart@ss', 3, 'tstark@xpzoo.com')
+INSERT INTO Employees(FirstName, LastName, UserName, Password, EmployeeNumber, Email) VALUES ('William', 'Deku', 'wdeku', 'plusultra', 4, 'wdeku@xpzoo.com')
+
+INSERT INTO dietplans (name, foodtype,FoodAmountInCups) VALUES ('carnivorous', 'meat', 100 )
+INSERT INTO dietplans (name, foodtype,FoodAmountInCups) VALUES ('vegan', 'plants', 200 )
+INSERT INTO dietplans (name, foodtype,FoodAmountInCups) VALUES ('french', 'cheese', 1000 )
+INSERT INTO dietplans (name, foodtype,FoodAmountInCups) VALUES ('hollywood', 'water', 9 )
+INSERT INTO dietplans (name, foodtype,FoodAmountInCups) VALUES ('omnivores', 'everything', 1 )
+
+INSERT INTO Animals
+(name, Weight, Age, Demeanor, KidFriendly, PetFriendly, Gender, AdoptionStatus, CategoryId, DietPlanId, EmployeeId) VALUES
+('Steve', 777, 25, 'livid', 0, 0, 'male', 'ready for adoption', 1, 1, 4)
+INSERT INTO Animals
+(name, Weight, Age, Demeanor, KidFriendly, PetFriendly, Gender, AdoptionStatus, CategoryId, DietPlanId, EmployeeId) VALUES
+('Stripes', 500, 13, 'chill', 1, 0, 'male', 'pending', 2, 1, 2)
+INSERT INTO Animals
+(name, Weight, Age, Demeanor, KidFriendly, PetFriendly, Gender, AdoptionStatus, CategoryId, DietPlanId, EmployeeId) VALUES
+('Bubbles', 1, 50, 'chill', 0, 1, 'neutral', 'ready for adoption', 3, 4, 2)
+INSERT INTO Animals
+(name, Weight, Age, Demeanor, KidFriendly, PetFriendly, Gender, AdoptionStatus, CategoryId, DietPlanId, EmployeeId) VALUES
+('Stacys Mom', 12, 54, 'aggressive', 0, 1, 'female', 'pending', 4, 5, 5)
+INSERT INTO Animals
+(name, Weight, Age, Demeanor, KidFriendly, PetFriendly, Gender, AdoptionStatus, CategoryId, DietPlanId, EmployeeId) VALUES
+('Bronze Beak', 1000, 5, 'prideful', 1, 1, 'male', 'returned', 5, 1, 5)
+
+INSERT INTO Rooms (RoomNumber, AnimalId) VALUES (7,1)
+INSERT INTO Rooms (RoomNumber, AnimalId) VALUES (2,2)
+INSERT INTO Rooms (RoomNumber, AnimalId) VALUES (13,3)
+INSERT INTO Rooms (RoomNumber, AnimalId) VALUES (13,4)
+INSERT INTO Rooms (RoomNumber, AnimalId) VALUES (42,5)
+
+INSERT INTO Clients (FirstName, LastName, UserName, Password, AddressId, Email) VALUES ('Ronaldo','Mickdonaldo','mickeyD','123abcd', null, 'mickeyD@gmail.com')
+INSERT INTO Clients (FirstName, LastName, UserName, Password, AddressId, Email) VALUES ('John','Rambo','rambo','1stBlood', null, 'rambo@hardcore.org')
+INSERT INTO Clients (FirstName, LastName, UserName, Password, AddressId, Email) VALUES ('Chapo','Guzman','mrwhite','theworldismine', null, 'cguzman@gmail.com')
+INSERT INTO Clients (FirstName, LastName, UserName, Password, AddressId, Email) VALUES ('Carlos','Sanchez','sanchoWon','qwyerty1', null, 'csanchez@aol.com')
+INSERT INTO Clients (FirstName, LastName, UserName, Password, AddressId, Email) VALUES ('Jeffery','Dahmer','dahman','campingHotubParty', null, 'jdangerous@sbc.global.net')
+
+SELECT * from rooms
+SELECT * from Categories
+SELECT * from DietPlans
+SELECT * from Employees
+SELECT * from animals
+
+
+
+
+
+
