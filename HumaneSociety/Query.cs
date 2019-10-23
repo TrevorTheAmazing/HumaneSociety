@@ -173,12 +173,8 @@ namespace HumaneSociety
         // TODO: Animal CRUD Operations
         internal static void AddAnimal(Animal animal)
         {
-            //new animal
-            //check constructor method?
-            //set properties
-            //insertonsubmit()
-            //submitchanges()
-            throw new NotImplementedException();
+            db.Animals.InsertOnSubmit(animal);
+            db.SubmitChanges();
         }
 
         internal static Animal GetAnimalByID(int id)
@@ -188,30 +184,137 @@ namespace HumaneSociety
         }
 
         internal static void UpdateAnimal(int animalId, Dictionary<int, string> updates)
-        {            
-            //do animalFromDb = null like clientFromDb = null;
-            //try/catch/return to avoid the rest of the procedure if no animal found
-            //set animalFromDb from animalWithUpdates
-            //any foreign key info will need to be posted prior to this animal insert(new room, new mealplan, etc)
-            //insertonsubmit(), then submitchanges()
-            //append new animal fk info from newly inserted FK objects
-            //submitchanges()
-            throw new NotImplementedException();
+        {
+            Animal animalFromDb = null;            
+
+            try
+            {
+                animalFromDb = db.Animals.Where(a => a.AnimalId == animalId).Single();
+            }
+            catch(InvalidOperationException)
+            {
+                Console.WriteLine("Could not find that animal.");
+                return;
+            }
+
+            foreach (var update in updates)
+            {
+                switch (update.Key)
+                {
+                    case (1):
+                        {
+                            animalFromDb.CategoryId = Int32.Parse(update.Value);
+                            break;
+                        }
+                    case (2):
+                        {
+                            animalFromDb.Name = update.Value;
+                            break;
+                        }
+                    case (3):
+                        {
+                            animalFromDb.Age = Int32.Parse(update.Value);
+                            break;
+                        }
+                    case (4):
+                        {
+                            animalFromDb.Demeanor = update.Value;
+                            break;
+                        }
+                    case (5):
+                        {
+                            animalFromDb.KidFriendly = (update.Value == "yes");
+                            break;
+                        }
+                    case (6):
+                        {
+                            animalFromDb.PetFriendly = (update.Value == "yes");
+                            break;
+                        }
+                    case (7):
+                        {
+                            animalFromDb.Weight = Int32.Parse(update.Value);
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+            }
+            db.SubmitChanges();
         }
 
         internal static void RemoveAnimal(Animal animal)
-        {            
-            //deleteonsubmit
-            //submitchanges
-            throw new NotImplementedException();
+        {
+            Animal tempAnimal;
+            try
+            {
+                var animals = db.Animals.Where(a => a.AnimalId == animal.AnimalId).Single();
+                tempAnimal = animals;
+            }
+            catch(InvalidOperationException)
+            {
+                Console.WriteLine("Animal not found.");
+                return;
+            }
+
+            db.Animals.DeleteOnSubmit(tempAnimal);
+            db.SubmitChanges();
         }
         
         // TODO: Animal Multi-Trait Search
-        internal static IQueryable<Animal> SearchForAnimalsByMultipleTraits(Dictionary<int, string> updates) // parameter(s)?
+        internal static IQueryable<Animal> SearchForAnimalsByMultipleTraits(Dictionary<int, string> traits)
         {
-            //recursive?
-            //use UI class here?
-            throw new NotImplementedException();
+            var tempAnimals = db.Animals.ToList();
+            foreach (var trait in traits)
+            {
+                switch (trait.Key)
+                {
+                    case (1):
+                        {
+                            tempAnimals = tempAnimals.Where(a => a.CategoryId == Int32.Parse(trait.Value)).ToList();
+                            break;
+                        }
+                    case (2):
+                        {
+                            tempAnimals = tempAnimals.Where(a => a.Name == trait.Value).ToList();
+                            break;
+                        }
+                    case (3):
+                        {
+                            tempAnimals = tempAnimals.Where(a => a.Age == Int32.Parse(trait.Value)).ToList();                            
+                            break;
+                        }
+                    case (4):
+                        {
+                            tempAnimals = tempAnimals.Where(a => a.Age == Int32.Parse(trait.Value)).ToList();
+                            break;
+                        }
+                    case (5):
+                        {
+                            bool tempValue = (trait.Value == "yes" || trait.Value == "y");
+                            tempAnimals = tempAnimals.Where(a => a.KidFriendly == tempValue).ToList();
+                            break;
+                        }
+                    case (6):
+                        {
+                            bool tempValue = (trait.Value == "yes" || trait.Value == "y");
+                            tempAnimals = tempAnimals.Where(a => a.PetFriendly == tempValue).ToList();
+                            break;
+                        }
+                    case (7):
+                        {
+                            tempAnimals = tempAnimals.Where(a => a.Weight == Int32.Parse(trait.Value)).ToList();
+                            break;
+                        }
+                    default:
+                        {
+                            break;
+                        }
+                }
+            }
+            return tempAnimals as IQueryable<Animal>;
         }
          
         // TODO: Misc Animal Things
@@ -229,44 +332,93 @@ namespace HumaneSociety
         
         internal static int GetDietPlanId(string dietPlanName)
         {
-            DietPlan dietPlan = db.DietPlans.Where(d => d.Name == dietPlanName).Single();
+            DietPlan dietPlan = db.DietPlans.Where(d => d.Name == dietPlanName).Single();                
             return dietPlan.DietPlanId;
         }
 
         // TODO: Adoption CRUD Operations
         internal static void Adopt(Animal animal, Client client)
         {
-            //new insert to adoptions table
-            //insertonsubmit()
-            //submitchanges()
-            throw new NotImplementedException();
+            var tempAdoption = db.Adoptions.Where(a => a.AnimalId == animal.AnimalId && a.ClientId == client.ClientId).Single();
+            if (tempAdoption.ApprovalStatus != null)
+            {
+                Console.WriteLine("This customer has already adopted this animal.");
+                return;
+            }
+            
+            Adoption newAdoption = new Adoption();
+            newAdoption.ClientId = client.ClientId;
+            newAdoption.AnimalId = animal.AnimalId;
+            newAdoption.ApprovalStatus = "pending";
+            newAdoption.AdoptionFee = 100;
+            newAdoption.PaymentCollected = false;
+
+            db.Adoptions.InsertOnSubmit(newAdoption);
+            db.SubmitChanges();
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
         {
             List<Adoption> allAdoptions = db.Adoptions.ToList();
-
             var tempPendingAdoptions = allAdoptions.Where(a => a.ApprovalStatus.Contains("pending"));
-
             return tempPendingAdoptions as IQueryable<Adoption>;
         }
 
         internal static void UpdateAdoption(bool isAdopted, Adoption adoption)
         {
-            //do animalFromDb = null like clientFromDb = null;
-            //try/catch/return to avoid the rest of the procedure if no animal found
-            //set animalFromDb from animalWithUpdates
-            //any foreign key info will need to be posted prior to this animal insert(new room, new mealplan, etc)
-            //insertonsubmit(), then submitchanges()
-            //append new animal fk info from newly inserted FK objects
-            //submitchanges()
-            throw new NotImplementedException();
+            Adoption adoptionFromDb = null;
+            try
+            {
+                var tempAdoption = db.Adoptions.Where(a => a.ClientId== adoption.ClientId && a.AnimalId == adoption.AnimalId).Single();
+                tempAdoption = adoptionFromDb;
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("Shot record for this animal does not exist.");
+                return;
+            }
+
+            adoptionFromDb.ApprovalStatus = isAdopted ? "adoption approved" : "adoption denied.";
+            db.SubmitChanges();
         }
 
         internal static void RemoveAdoption(int animalId, int clientId)
         {
-            //delete
-            throw new NotImplementedException();
+            Adoption tempAdoption = new Adoption();
+            var removeAdoption = db.Adoptions.Where(a => a.AnimalId == animalId && a.ClientId == clientId).Single();
+                try
+                {
+                tempAdoption = removeAdoption;
+                }
+                catch(InvalidOperationException)
+                {
+                Console.WriteLine("Could not find that adoption.");
+                return;
+                }
+            
+            bool success = false;
+            try
+            {
+                db.Adoptions.DeleteOnSubmit(tempAdoption);
+                db.SubmitChanges();
+            }
+            catch//InvalidOperationException
+            {
+                Console.WriteLine("RemoveAdoption failed.");
+            }
+            finally
+            {
+                if (success)
+                {
+                    Console.WriteLine("Adoption removed.");
+                }
+                else
+                {
+                    Console.WriteLine("RemoveAdoption failed.");
+                }
+            }
+                
+            //throw new NotImplementedException();
         }
 
         // TODO: Shots Stuff
@@ -278,14 +430,19 @@ namespace HumaneSociety
 
         internal static void UpdateShot(string shotName, Animal animal)
         {
-            //do animalFromDb = null like clientFromDb = null;
-            //try/catch/return to avoid the rest of the procedure if no animal found
-            //set animalFromDb from animalWithUpdates
-            //any foreign key info will need to be posted prior to this animal insert(new room, new mealplan, etc)
-            //insertonsubmit(), then submitchanges()
-            //append new animal fk info from newly inserted FK objects
-            //submitchanges()
-            throw new NotImplementedException();
+            AnimalShot animalShotFromDb = null;
+            try
+            {
+                var tempShot = db.Shots.Where(s => s.Name == shotName).Single();
+                animalShotFromDb = db.AnimalShots.Where(aS => aS.ShotId == tempShot.ShotId && aS.AnimalId == animal.AnimalId).Single();
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("Shot record for this animal does not exist.");
+                return;
+            }
+            animalShotFromDb.DateReceived = DateTime.Today;
+            db.SubmitChanges();
         }
     }
 }

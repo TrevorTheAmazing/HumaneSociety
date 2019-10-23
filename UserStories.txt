@@ -12,23 +12,19 @@ The primary goal of this project is to implement these functions.
 
 
 (10points)As adeveloper, I want to implement the Query.RunEmployeeQueries() method so that any CRUD operation can be applied to an employee.
-(10points)As a developer, I want to implement the various methods in the Query class that pertain to Animal CRUD operations.
-
-(10points)As a developer, I want to implement the Query.SearchForAnimalByMultipleTraits() method to return a list of animals that fit every criterion passed to me.
-
-
-
-(15points)As adeveloper, I want to implement the various methods in the Query class that pertain to Adoptions.
-(10points)As adeveloper, I want to implement the various methods in the Query class that pertain to Shots.
-
 
 
 
 IN PROGRESS - (5 points):As a developer, I want to make good, consistent commits.
 IN PROGRESS - (10 points)As a developer, I want to use C# best practices, SOLID design principles, exception handling, null checking, and good naming conventions when building my application.
 IN PROGRESS - (15 points)As a developer, I want to use LINQ extension methods and/or LINQ query operators wherever applicable in my application.
+
 DONE - (10 points)As a developer, I want to seed my database with at least 5 categories, 5 diet plans, 5 animals, 10 rooms, 5 employees, and 5 clients by writing queries using SQL Server Management Studio. I will save these queries to a .sqlor .txt file tosave for review.
 DONE - (10points)As a developer, I want to implement the various methods in the Query class that deal with animal-related things. Query.GetCategoryId(), Query.GetRoom(),and Query.GetDietPlanId().
+DONE - (10points)As a developer, I want to implement the various methods in the Query class that pertain to Animal CRUD operations.
+DONE - (10points)As adeveloper, I want to implement the various methods in the Query class that pertain to Shots.
+DONE - (10points)As a developer, I want to implement the Query.SearchForAnimalByMultipleTraits() method to return a list of animals that fit every criterion passed to me.
+DONE - (15points)As adeveloper, I want to implement the various methods in the Query class that pertain to Adoptions.
 
 
 BONUS User Stories:
