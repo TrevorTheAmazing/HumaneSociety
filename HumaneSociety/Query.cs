@@ -166,13 +166,136 @@ namespace HumaneSociety
         // TODO: Allow any of the CRUD operations to occur here
         internal static void RunEmployeeQueries(Employee employee, string crudOperation)
         {
-            //use a delegate here?
-            throw new NotImplementedException();
+            if (crudOperation=="create")
+            {
+                InsertNewEmployee(employee);
+            }
+
+            else if (crudOperation=="read")
+            {
+                DisplayEmployeeInformation(employee);
+            }
+
+            else if (crudOperation=="update")
+            {
+                //update
+                //finduser
+                //updateuser
+                if (UpdateEmployee(employee))
+                {
+                    Console.WriteLine("Employee information updated.");
+                }
+                
+            }
+
+            else if (crudOperation == "delete")
+            {
+                if (DeleteEmployee(employee))
+                {
+                    Console.WriteLine("Employee deleted.");
+                }
+            }
+        }
+
+        internal static void InsertNewEmployee(Employee employee)
+        {
+            Employee newEmployee = new Employee();
+            
+            newEmployee = employee;
+
+            newEmployee.FirstName = UserInterface.GetStringData("first name", "the new user");
+            newEmployee.LastName = UserInterface.GetStringData("last name", "the new user");
+            newEmployee.UserName = UserInterface.GetStringData("username", "the new user");
+            newEmployee.Password = UserInterface.GetStringData("password", "the new user");
+
+            db.Employees.InsertOnSubmit(newEmployee);
+            //db.SubmitChanges();
+            //UpdateEmployee(newEmployee);
+            db.SubmitChanges();
+            Console.Clear();
+            Console.WriteLine("New employee created.");
+        }
+
+        internal static void DisplayEmployeeInformation(Employee employee)
+        {
+            var employeeFromDb = db.Employees.Where(e => e.EmployeeId == employee.EmployeeId).Single();
+            List<string> info = new List<string>() { employeeFromDb.EmployeeId.ToString(), employeeFromDb.FirstName, employeeFromDb.LastName, employeeFromDb.Email };
+            Console.ReadLine();
+        }
+
+        internal static bool UpdateEmployee(Employee employee)
+        {
+            bool tempResult = false;
+            Employee tempEmployee = null;            
+
+            try
+            {
+                var employeeFromDb = db.Employees.Where(e => e.EmployeeId == employee.EmployeeId).Single();
+                tempEmployee = employeeFromDb;
+            }
+            catch(InvalidOperationException)
+            {
+                Console.WriteLine("Could not find that employee.");
+                return tempResult;
+            }
+
+
+            db.SubmitChanges();
+            Console.Clear();
+            Console.WriteLine("Employee information updated.");
+            return tempResult;
+        }
+
+        internal static bool DeleteEmployee(Employee employee)
+        {
+            bool tempResult = false;
+            Employee tempEmployee = null;
+            try
+            {
+                var employeeFromDb = db.Employees.Where(e => e.EmployeeId == employee.EmployeeId).Single();
+                tempEmployee = employeeFromDb;
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("Could not find that employee.");
+                return tempResult;
+            }
+
+            db.Employees.DeleteOnSubmit(tempEmployee);
+            db.SubmitChanges();
+            return tempResult;
         }
 
         // TODO: Animal CRUD Operations
         internal static void AddAnimal(Animal animal)
         {
+            try
+            {
+                var tempCategory = db.Categories.Where(c => c.CategoryId == animal.CategoryId).Single();
+            }
+            catch(Exception)
+            {
+                var tempCategory = db.Categories.First();
+            }            
+
+            try
+            {
+                var tempDietPlan = db.DietPlans.Where(d => d.DietPlanId == animal.DietPlanId).Single();
+            }
+            catch(Exception)
+            {
+                var tempDietPlan = db.DietPlans.First();
+            }
+
+            try
+            {
+                var tempEmployee = db.Employees.Where(e => e.EmployeeId == animal.EmployeeId).Single();
+            }
+            catch(Exception)
+            {
+                var tempEmployee = db.Employees.First();
+            }
+            
             db.Animals.InsertOnSubmit(animal);
             db.SubmitChanges();
         }
@@ -320,8 +443,23 @@ namespace HumaneSociety
         // TODO: Misc Animal Things
         internal static int GetCategoryId(string categoryName)
         {
-            Category category = db.Categories.Where(c => c.Name == categoryName).Single();
-            return category.CategoryId;
+            
+            int tempInt = -1;
+            try
+            {
+                Category category = db.Categories.Where(c => c.Name == categoryName).Single();
+                tempInt = category.CategoryId;
+            }
+            catch(Exception)
+            {
+                Category tempCategory = new Category();
+                tempCategory.Name = categoryName;
+                db.Categories.InsertOnSubmit(tempCategory);
+                db.SubmitChanges();
+                tempInt = tempCategory.CategoryId;
+            }
+
+            return tempInt;
         }
         
         internal static Room GetRoom(int animalId)
@@ -332,8 +470,23 @@ namespace HumaneSociety
         
         internal static int GetDietPlanId(string dietPlanName)
         {
-            DietPlan dietPlan = db.DietPlans.Where(d => d.Name == dietPlanName).Single();                
-            return dietPlan.DietPlanId;
+            int tempDietPlan;
+            try
+            {
+                DietPlan dietPlan = db.DietPlans.Where(d => d.Name == dietPlanName).Single();
+                tempDietPlan = dietPlan.DietPlanId;
+            }
+            catch(Exception)
+            {
+                DietPlan newDietPlan = new DietPlan();
+                newDietPlan.Name = dietPlanName;
+                db.DietPlans.InsertOnSubmit(newDietPlan);
+                db.SubmitChanges();
+                tempDietPlan = newDietPlan.DietPlanId;
+
+            }
+            
+            return tempDietPlan;
         }
 
         // TODO: Adoption CRUD Operations
@@ -355,6 +508,8 @@ namespace HumaneSociety
 
             db.Adoptions.InsertOnSubmit(newAdoption);
             db.SubmitChanges();
+            Console.Clear();
+            Console.WriteLine("New adoption created.");
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
@@ -374,12 +529,14 @@ namespace HumaneSociety
             }
             catch (InvalidOperationException)
             {
-                Console.WriteLine("Shot record for this animal does not exist.");
+                Console.WriteLine("Adoption record for this animal does not exist.");
                 return;
             }
 
             adoptionFromDb.ApprovalStatus = isAdopted ? "adoption approved" : "adoption denied.";
             db.SubmitChanges();
+            Console.Clear();
+            Console.WriteLine("Adoption updated.");
         }
 
         internal static void RemoveAdoption(int animalId, int clientId)
@@ -442,6 +599,26 @@ namespace HumaneSociety
                 return;
             }
             animalShotFromDb.DateReceived = DateTime.Today;
+            db.SubmitChanges();
+            Console.Clear();
+            Console.WriteLine("Shot record updated.");
+        }
+
+        internal static void InsertNewCategory(string categoryName)
+        {
+            Category tempCategory = new Category();
+            tempCategory.Name = categoryName;
+            db.Categories.InsertOnSubmit(tempCategory);
+            db.SubmitChanges();
+        }
+
+        internal static void InsertNewDietPlan(string dietPlanIn)
+        {
+            DietPlan tempDietPlan = new DietPlan();
+            tempDietPlan.Name = dietPlanIn;
+            tempDietPlan.FoodType = UserInterface.GetStringData("food type", "the new diet plan");
+            tempDietPlan.FoodAmountInCups = Int32.Parse(UserInterface.GetStringData("food amount measured in cups", "the new diet plan"));
+            db.DietPlans.InsertOnSubmit(tempDietPlan);
             db.SubmitChanges();
         }
     }

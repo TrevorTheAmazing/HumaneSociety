@@ -35,6 +35,8 @@ namespace HumaneSociety
         }
         protected virtual void LogInPreExistingUser()
         {
+            //i put this here
+            throw new NotImplementedException();
 
         }
 

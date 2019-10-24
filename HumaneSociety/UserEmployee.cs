@@ -251,6 +251,7 @@ namespace HumaneSociety
 
             Animal animal = new Animal();
             animal.CategoryId = Query.GetCategoryId(animalCategoryName);
+
             animal.Name = UserInterface.GetStringData("name", "the animal's");
             animal.Age = UserInterface.GetIntegerData("age", "the animal's");
             animal.Demeanor = UserInterface.GetStringData("demeanor", "the animal's");
@@ -292,7 +293,11 @@ namespace HumaneSociety
             }
             catch
             {
-                UserInterface.DisplayUserOptions("Employee not found please contact your administrator");
+                //UserInterface.DisplayUserOptions("Employee not found please contact your administrator");
+                Employee employee = new Employee();
+                employee.Email = email;
+                employee.EmployeeNumber = employeeNumber;
+                Query.InsertNewEmployee(employee);
                 PointOfEntry.Run();
             }
             if (employee.Password != null)
